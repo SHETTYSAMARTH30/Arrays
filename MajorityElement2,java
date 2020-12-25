@@ -1,0 +1,76 @@
+class MajorityElement2 {
+    public List<Integer> majorityElement(int[] nums) {
+        
+        //Boyer-Moore's voting algorithm
+        
+        //For N/3 condition of majority element there will be atmost 2 majority element
+        Integer candidate1 = null;
+        Integer candidate2 = null;
+        
+        int count1 = 0;
+        int count2 = 0;
+        
+        //1st - Pass: We keep track of top 2 high frequency element in this pass
+        for(int n : nums){
+            
+            //If n == candidate1 then we increment its count
+            if(candidate1 != null && candidate1 == n){
+                
+                count1++;
+            }
+            //If n == candidate2 then we increment its count
+            else if(candidate2 != null && candidate2 == n){
+                
+                count2++;
+            }
+            //If there is no max freq candidate as of now then assign current num to candidate1 and increment its count
+            else if(count1 == 0){
+                
+                candidate1 = n;
+                count1++;
+            }
+            //If there is only 1 max freq candidate as of now then assign current num to candidate2 and increment its count, so that it becomes candidate for 2nd majority element
+            else if(count2 == 0){
+                
+                candidate2 = n;
+                count2++;
+            }
+            //If n is not equal to both candidates then we decrement the count of both the candidates by 1
+            else{
+                
+                count1--;
+                count2--;
+            }
+        }
+        
+        //2nd - Pass
+        
+        count1 = 0;
+        count2 = 0;
+        
+        //Here we count frequency of both the candidates in array
+        for(int n : nums){
+            
+            if(candidate1 != null && candidate1 == n)
+                count1++;
+            
+            if(candidate2 != null && candidate2 == n)
+                count2++;
+        }
+        
+        int n = nums.length;
+        
+        List<Integer> result = new ArrayList<>();
+        
+        //If the count of candidate1 > N/3 then its result
+        if(count1 > n / 3)
+            result.add(candidate1);
+        
+        //If the count of candidate2 > N/3 then its result
+        if(count2 > n / 3)
+            result.add(candidate2);
+        
+        return result;
+
+    }
+}
